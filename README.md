@@ -11,6 +11,7 @@ Open **Actions → Build X1360 Android APK**. The workflow checks out a pinned X
 - Target: Android arm64 + Vulkan; Snapdragon/Adreno devices are the intended focus.
 - Add your own legally dumped Xbox 360 game files through the emulator's game-folder picker. GOD package support is provided by the emulator; keep the package's full folder structure intact.
 - GTA V on Android is experimental. A successful APK build does **not** prove GTA V will boot or run smoothly on a particular phone. The Snapdragon 8+ Gen 1 / Adreno 730 is below Xendroid+'s recommended Snapdragon 8 Gen 2 / Adreno 740 class, so stable high frame rates cannot be promised.
+- This first build wrapper compiles upstream Xendroid+; it does not yet include a verified GTA V-specific optimization patch or a tested GTA V performance profile.
 - Game files, console firmware, keys and copyrighted game assets are not included.
 
 ## Upstream and license
