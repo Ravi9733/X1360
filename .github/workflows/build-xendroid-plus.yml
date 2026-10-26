@@ -57,13 +57,21 @@ jobs:
           validate-wrappers: false
 
       - name: Install Android SDK packages
+        shell: bash
         run: |
-          test -x "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager"
-          yes | "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" --licenses > /dev/null
+          set -euo pipefail
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager"
+          test -x "$SDKMANAGER"
+          # sdkmanager can finish before yes exits; avoid pipefail treating yes' SIGPIPE as failure.
+          set +o pipefail
+          yes | "$SDKMANAGER" --licenses > /dev/null
+          set -o pipefail
           for package in "ndk;$ANDROID_NDK_VERSION" "cmake;$CMAKE_VERSION" \
                          "build-tools;$BUILD_TOOLS_VERSION" "platforms;android-35"; do
             dir="$ANDROID_HOME/$(echo "$package" | tr ';' '/')"
-            [ -d "$dir" ] || "$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager" "$package" > /dev/null
+            if [ ! -d "$dir" ]; then
+              "$SDKMANAGER" "$package"
+            fi
           done
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION" >> "$GITHUB_ENV"
           {
